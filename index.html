@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <main>
+        <form class="modal">
+            <div class="container">
+                <label>Количество страниц (полос), включая обложку:
+                    <input name="pages" type="number" min=8 value="8" required>
+                </label>
+            </div>
+            <div class="container">
+                <label>Из них, цветные (первая страница это обложка):
+                    <input type="text" name="colorPages" min=0>
+                </label>
+            </div>
+            <div class="container">
+                <div>Вид обложки:</div>
+                <label>
+                    <input type="radio" name="cover" value="1" required>Белая
+                </label>
+                <label>
+                    <input type="radio" name="cover" value="2" required>Цветная
+                </label>
+            </div>
+            <div class="container">
+                <label>Количество экземпляров брошюры:
+                    <input type="number" name="total" min=0 required>
+                </label>
+            </div>
+            <button type="submit">Посчитать</button>
+        </form>
+    </main>
+    <div class="container">
+        <p>ИТОГО:</p>
+        <span class="totalPrice"></span>
+    </div>
+    <div class="container">
+        <p>Обложка:</p>
+        <span class="coverPages"></span>
+    </div>
+    <div class="container">
+        <p class="uncolorPages_total">Чб:</p>
+        <span class="uncolorPages"></span>
+    </div>
+    <div class="container">
+        <p class="colorPages_total">Цветные:</p>
+        <span class="colorPages"></span>
+    </div>
+
+
+    <script src='js/calc.js'></script>
+</body>
+
+</html>
