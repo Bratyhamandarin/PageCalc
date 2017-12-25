@@ -41,7 +41,7 @@ const cover = {
 };
 
 // cost of preprint
-const preprint = 100;
+const preprint = 50;
 
 modal.addEventListener("submit", e => {
   e.preventDefault();
@@ -102,7 +102,8 @@ function getCalcConfig(obj) {
   let colPagesА5 = obj.colorPages
     .split(",")
     .map(num => num.trim())
-    .filter(item => item);
+    .filter(item => item)
+    .filter(item => item !== "0");
 
   let currA4Page = 1,
     pages = [];
@@ -158,23 +159,23 @@ function colorCost(allPages, total) {
   let pages = total * allPages.length;
   let colorCostTotal;
   switch (true) {
-    case pages <= 25:
+    case pages < 25:
       colorCostTotal = color.to25 * pages;
 
       break;
-    case pages <= 50:
+    case pages < 50:
       colorCostTotal = color.to50 * pages;
 
       break;
-    case pages <= 100:
+    case pages < 100:
       colorCostTotal = color.to100 * pages;
 
       break;
-    case pages <= 300:
+    case pages < 300:
       colorCostTotal = color.to300 * pages;
 
       break;
-    case pages <= 500:
+    case pages < 500:
       colorCostTotal = color.to500 * pages;
 
       break;
@@ -184,25 +185,26 @@ function colorCost(allPages, total) {
       break;
   }
   return colorCostTotal;
+  console.log(colorCostTotal);
 }
 
 function uncolorCost(allPages, total) {
   let pages = total * allPages.length;
   let uncolorCostTotal;
   switch (true) {
-    case pages <= 300:
+    case pages < 300:
       uncolorCostTotal = uncolor.to300 * pages;
 
       break;
-    case pages <= 500:
+    case pages < 500:
       uncolorCostTotal = uncolor.to500 * pages;
 
       break;
-    case pages <= 1000:
+    case pages < 1000:
       uncolorCostTotal = uncolor.to1000 * pages;
 
       break;
-    case pages <= 2000:
+    case pages < 2000:
       uncolorCostTotal = uncolor.to2000 * pages;
 
       break;
@@ -217,11 +219,11 @@ function uncolorCost(allPages, total) {
 function printCost(total) {
   let postCost;
   switch (true) {
-    case total <= 25:
+    case total < 25:
       postCost = post.to25 * total;
 
       break;
-    case total <= 50:
+    case total < 50:
       postCost = post.to50 * total;
 
       break;
@@ -268,7 +270,7 @@ function validate(input) {
   // проверка кейсов ошибок
   for (let i = 0; i < colPagesА5.length; i++) {
     // страниц нету меньше нуля и больше общего кол-ва страниц
-    if (colPagesА5[i] > totalA5 || colPagesА5[i] <= 0) {
+    if (colPagesА5[i] > totalA5 || colPagesА5[i] < 0) {
       showError(`${colPagesА5[i]} страницы нету`);
       trigger = false;
       break;
