@@ -4,6 +4,8 @@ const uncolorPagesTotalNode = document.querySelector(".uncolorPages_total");
 const uncolorPagesNode = document.querySelector(".uncolorPages");
 const colorPagesTotalNode = document.querySelector(".colorPages_total");
 const colorPagesNode = document.querySelector(".colorPages");
+// error node
+const errorNode = document.querySelector('.errorMsg')
 //get our modal with data
 const modal = document.querySelector(".modal");
 // cost of no color pages
@@ -39,7 +41,7 @@ const cover = {
 };
 
 // cost of preprint
-const preprint = 500;
+const preprint = 100;
 
 modal.addEventListener("submit", e => {
   e.preventDefault();
@@ -49,6 +51,11 @@ modal.addEventListener("submit", e => {
   for (let pair of form.entries()) {
     buffer[pair[0]] = pair[1];
   }
+
+  resetNodes()
+  errorNode.textContent = ''
+  if (!validate(buffer)) return 
+  // validate(buffer)
 
   // get color pages
   let pages = getCalcConfig(buffer);
@@ -64,6 +71,7 @@ modal.addEventListener("submit", e => {
   const total = colorPagesCost + uncolorPagesCost + postprintCost + coverCost + preprint;
   totalPrice.textContent = `${total} рублей`;
 
+  // cover in HTML
   coverPagesNode.textContent = pages.pagesCollection[0].a5Pages.join(", ");
 
   // get uncolor pages A5
@@ -96,15 +104,6 @@ function getCalcConfig(obj) {
     .split(",")
     .map(num => num.trim())
     .filter(item => item)
-    .filter(item => {
-      return (
-        item !== "1" &&
-        item !== "2" &&
-        item !== a5Pages[a5Pages.length - 1].toString() &&
-        item !== a5Pages[a5Pages.length - 2].toString() &&
-        item < totalA5
-      );
-    });
 
   let currA4Page = 1,
     pages = [];
@@ -141,8 +140,9 @@ function getCalcConfig(obj) {
   colPagesA4 = new Set(colPagesA4);
 
   let A4pages = Array.from({ length: totalA4 }, (v, k) => k + 1);
-  let uncolorPagesA4 = [];
+  A4pages.shift()
 
+  let uncolorPagesA4 = [];
   // get uncolor pages
   A4pages.forEach(page => {
     !colPagesA4.has(page) && uncolorPagesA4.push(page);
@@ -251,4 +251,51 @@ function getRangedArray(arr) {
     (numberArray, index) =>
       numberArray.length > 1 ? `${numberArray[0]}-${numberArray[numberArray.length - 1]}` : numberArray[0]
   );
+}
+
+function validate(input) {
+  let trigger = true;
+  // number of a5 pages
+  let totalA5 = 4 * Math.ceil(+input.pages / 4);
+  // number of a4 pages
+  let totalA4 = totalA5 / 4,
+    a5Pages = Array.from({ length: totalA5 }, (v, k) => k + 1);
+
+  let colPagesА5 = input.colorPages
+    .split(",")
+    .map(num => num.trim())
+    .filter(item => item);
+
+  // проверка кейсов ошибок
+  for (let i = 0; i < colPagesА5.length; i++) {
+    // страниц нету меньше нуля и больше общего кол-ва страниц 
+    if (colPagesА5[i] > totalA5 || colPagesА5[i] <= 0) {
+      showError(`${colPagesА5[i]} страницы нету`)
+      trigger = false;
+      break;
+      // не обложка
+    } else if (colPagesА5[i] == '1' || colPagesА5[i] == '2' || colPagesА5[i] == a5Pages[a5Pages.length - 1].toString() || colPagesА5[i] == a5Pages[a5Pages.length - 2].toString()) {
+      showError('Нельзя вводить страницы обложки')
+      trigger = false;
+      break;
+      // не число
+    } else if (/\D/.test(colPagesА5[i])) {
+      showError('Нельзя вводить не числа')
+      trigger = false;
+    }
+  };
+  return trigger
+}
+
+function showError(errorMessage) {
+  errorNode.textContent = errorMessage
+}
+
+function resetNodes() {
+  elems = document.querySelectorAll('.container span');
+  [].forEach.call(elems, elem => {
+    elem.textContent = ''
+  });
+  uncolorPagesTotalNode.textContent = 'Чб:'
+  colorPagesTotalNode.textContent = 'Цветные:'
 }
