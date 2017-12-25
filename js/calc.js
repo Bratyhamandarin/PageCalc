@@ -53,7 +53,6 @@ modal.addEventListener("submit", e => {
   }
 
   resetNodes();
-  errorNode.textContent = "";
   if (!validate(buffer)) return;
   // validate(buffer)
 
@@ -304,4 +303,5 @@ function resetNodes() {
   });
   uncolorPagesTotalNode.textContent = "Чб:";
   colorPagesTotalNode.textContent = "Цветные:";
+  errorNode.textContent = "";
 }
