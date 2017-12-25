@@ -5,7 +5,7 @@ const uncolorPagesNode = document.querySelector(".uncolorPages");
 const colorPagesTotalNode = document.querySelector(".colorPages_total");
 const colorPagesNode = document.querySelector(".colorPages");
 // error node
-const errorNode = document.querySelector('.errorMsg')
+const errorNode = document.querySelector(".errorMsg");
 //get our modal with data
 const modal = document.querySelector(".modal");
 // cost of no color pages
@@ -52,9 +52,9 @@ modal.addEventListener("submit", e => {
     buffer[pair[0]] = pair[1];
   }
 
-  resetNodes()
-  errorNode.textContent = ''
-  if (!validate(buffer)) return 
+  resetNodes();
+  errorNode.textContent = "";
+  if (!validate(buffer)) return;
   // validate(buffer)
 
   // get color pages
@@ -103,7 +103,7 @@ function getCalcConfig(obj) {
   let colPagesА5 = obj.colorPages
     .split(",")
     .map(num => num.trim())
-    .filter(item => item)
+    .filter(item => item);
 
   let currA4Page = 1,
     pages = [];
@@ -140,7 +140,7 @@ function getCalcConfig(obj) {
   colPagesA4 = new Set(colPagesA4);
 
   let A4pages = Array.from({ length: totalA4 }, (v, k) => k + 1);
-  A4pages.shift()
+  A4pages.shift();
 
   let uncolorPagesA4 = [];
   // get uncolor pages
@@ -268,34 +268,39 @@ function validate(input) {
 
   // проверка кейсов ошибок
   for (let i = 0; i < colPagesА5.length; i++) {
-    // страниц нету меньше нуля и больше общего кол-ва страниц 
+    // страниц нету меньше нуля и больше общего кол-ва страниц
     if (colPagesА5[i] > totalA5 || colPagesА5[i] <= 0) {
-      showError(`${colPagesА5[i]} страницы нету`)
+      showError(`${colPagesА5[i]} страницы нету`);
       trigger = false;
       break;
       // не обложка
-    } else if (colPagesА5[i] == '1' || colPagesА5[i] == '2' || colPagesА5[i] == a5Pages[a5Pages.length - 1].toString() || colPagesА5[i] == a5Pages[a5Pages.length - 2].toString()) {
-      showError('Нельзя вводить страницы обложки')
+    } else if (
+      colPagesА5[i] == "1" ||
+      colPagesА5[i] == "2" ||
+      colPagesА5[i] == a5Pages[a5Pages.length - 1].toString() ||
+      colPagesА5[i] == a5Pages[a5Pages.length - 2].toString()
+    ) {
+      showError("Нельзя вводить страницы обложки");
       trigger = false;
       break;
       // не число
     } else if (/\D/.test(colPagesА5[i])) {
-      showError('Нельзя вводить не числа')
+      showError("Нельзя вводить не числа");
       trigger = false;
     }
-  };
-  return trigger
+  }
+  return trigger;
 }
 
 function showError(errorMessage) {
-  errorNode.textContent = errorMessage
+  errorNode.textContent = errorMessage;
 }
 
 function resetNodes() {
-  elems = document.querySelectorAll('.container span');
+  elems = document.querySelectorAll(".container span");
   [].forEach.call(elems, elem => {
-    elem.textContent = ''
+    elem.textContent = "";
   });
-  uncolorPagesTotalNode.textContent = 'Чб:'
-  colorPagesTotalNode.textContent = 'Цветные:'
+  uncolorPagesTotalNode.textContent = "Чб:";
+  colorPagesTotalNode.textContent = "Цветные:";
 }
