@@ -287,6 +287,7 @@ function validate(input) {
     } else if (/\D/.test(colPagesА5[i])) {
       showError("Нельзя вводить не числа");
       trigger = false;
+      break;
     }
   }
   return trigger;
